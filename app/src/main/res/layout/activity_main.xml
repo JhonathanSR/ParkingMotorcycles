@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/logout" />
 
     <Button
-        android:id="@+id/btnRegistrar"
+        android:id="@+id/btnRegistrarM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -47,7 +47,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRegis" />
+        app:layout_constraintTop_toBottomOf="@+id/txtRegisM" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -61,7 +61,7 @@
         app:srcCompat="@drawable/logosinfondo" />
 
     <TextView
-        android:id="@+id/txtRegis"
+        android:id="@+id/txtRegisM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -71,7 +71,7 @@
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegistrar" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRegistrarM" />
 
     <Button
         android:id="@+id/btnAdmin"
@@ -86,6 +86,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.11"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnInicio" />
+
+    <TextView
+        android:id="@+id/txtRegistro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="92dp"
+        android:text="¿Ingreso Administrativo?"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.201"
+        app:layout_constraintStart_toEndOf="@+id/btnAdmin"
         app:layout_constraintTop_toBottomOf="@+id/btnInicio" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

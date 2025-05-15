@@ -8,8 +8,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.parkingmotor.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+    lateinit var  binding: ActivityMainBinding
+    lateinit var usuariosDBHelper: mySQLiteHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -19,12 +22,17 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        var btnRegistrar = findViewById<Button>(R.id.btnRegistrar)
-        btnRegistrar.setOnClickListener {
+        usuariosDBHelper = mySQLiteHelper(this)
+        var txtRegistro = findViewById<TextView>(R.id.txtRegistro)
+        txtRegistro.setOnClickListener {
+            goAdmin()
+        }
+        var btnRegistrarM = findViewById<Button>(R.id.btnRegistrarM)
+        btnRegistrarM.setOnClickListener {
             goMenu()
         }
-        var txtRegis = findViewById<TextView>(R.id.txtRegis)
-        txtRegis.setOnClickListener {
+        var txtRegisM = findViewById<TextView>(R.id.txtRegisM)
+        txtRegisM.setOnClickListener {
             goMenu()
         }
         var btnAdmin = findViewById<Button>(R.id.btnAdmin)
@@ -32,16 +40,17 @@ class MainActivity : AppCompatActivity() {
             goRegistrar()
         }
     }
+
     private  fun goMenu(){
     val i = Intent(this, Menu::class.java)
     startActivity(i)
 }
-    private fun goLogin(){
-    val i = Intent(this, Login::class.java)
+    private fun goRegistrar(){
+    val i = Intent(this, Register::class.java)
     startActivity(i)
     }
-    private fun goRegistrar(){
-    val i = Intent(this, Menu::class.java)
+    private fun goAdmin(){
+    val i = Intent(this, Register::class.java)
     startActivity(i)
     }
 }
