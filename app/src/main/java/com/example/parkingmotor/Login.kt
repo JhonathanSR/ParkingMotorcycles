@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -34,6 +35,14 @@ class Login : AppCompatActivity() {
         var btnIngresar = findViewById<Button>(R.id.btnIngresar)
         btnIngresar.setOnClickListener {
             loginUser()
+        }
+        var ImgRetro1 = findViewById<ImageView>(R.id.ImgRetro1)
+        ImgRetro1.setOnClickListener {
+            goPrincipal()
+        }
+        var imgExit1 = findViewById<ImageView>(R.id.imgExit1)
+        imgExit1.setOnClickListener {
+            goSalir()
         }
 
     }
@@ -75,6 +84,10 @@ class Login : AppCompatActivity() {
     }
     private fun goMenuUno(){
         val i = Intent(this, Pagos::class.java)
+        startActivity(i)
+    }
+    private fun goSalir(){
+        val i = Intent(this, MainActivity::class.java)
         startActivity(i)
     }
 

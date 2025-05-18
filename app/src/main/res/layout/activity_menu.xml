@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/logout" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/btnRegP"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -34,52 +34,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="76dp"
-        android:layout_marginTop="176dp"
-        android:backgroundTint="#06EA0F"
-        android:text="Marca"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:textSize="14dp"
-        app:layout_constraintEnd_toStartOf="@+id/editTextText2"
-        app:layout_constraintHorizontal_bias="0.071"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/edtPlac"
         android:layout_width="139dp"
         android:layout_height="47dp"
         android:layout_marginTop="96dp"
         android:ems="10"
+        android:hint="edtPlaca"
         android:inputType="text"
         android:text=""
-        android:hint="Ingrese Placa"
         android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.301"
-        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintStart_toEndOf="@+id/btnRegP"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
-        android:id="@+id/editTextText2"
+        android:id="@+id/edtMarc"
         android:layout_width="134dp"
         android:layout_height="44dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="48dp"
         android:ems="10"
-        android:hint="Nombre Completo"
+        android:hint="edtMarca"
         android:inputType="text"
         android:text=""
         android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@+id/edtPlac" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -103,8 +87,7 @@
         android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/btnNext"
@@ -116,7 +99,34 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toEndOf="@+id/btnIni"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText2"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_media_play" />
+
+    <TextView
+        android:id="@+id/tvFechaHora"
+        android:layout_width="64dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="68dp"
+        android:text=""
+        android:hint="Ingrese Fecha"
+        android:textColor="@color/white"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.659"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:textSize="18dp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:text="Marca"
+        app:layout_constraintEnd_toStartOf="@+id/edtMarc"
+        app:layout_constraintHorizontal_bias="0.631"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegP" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

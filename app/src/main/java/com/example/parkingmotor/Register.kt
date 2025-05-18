@@ -34,7 +34,7 @@ class Register : AppCompatActivity() {
 
         var btnRegistro = findViewById<Button>(R.id.btnRegistro)
         btnRegistro.setOnClickListener {
-            goLogin()
+            registerUser()
         }
         var imgExit1 = findViewById<ImageView>(R.id.imgExit1)
         imgExit1.setOnClickListener {

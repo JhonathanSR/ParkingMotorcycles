@@ -45,12 +45,14 @@
         android:id="@+id/txtCorreo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:text="Correo"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="18dp"
-        tools:layout_editor_absoluteX="167dp"
-        tools:layout_editor_absoluteY="362dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6" />
 
     <EditText
         android:id="@+id/edtCorreo"
@@ -60,7 +62,7 @@
         android:ems="10"
         android:hint="Ingrese su Correo Registrado"
         android:inputType=""
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -71,25 +73,28 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:text="Contraseña"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="18dp"
-        tools:layout_editor_absoluteX="161dp"
-        tools:layout_editor_absoluteY="491dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtCorreo" />
 
     <EditText
         android:id="@+id/edtPassw"
         android:layout_width="208dp"
         android:layout_height="49dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="Ingrese su Contraseña"
         android:inputType=""
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
