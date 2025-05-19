@@ -17,7 +17,7 @@ import com.example.parkingmotor.databinding.ActivityMainBinding
 
 class Login : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
-    lateinit var usuariosDBHelper: mySQLiteHelper
+    lateinit var usuariosDBHelper: MySQLiteHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -30,7 +30,7 @@ class Login : AppCompatActivity() {
         }
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        usuariosDBHelper = mySQLiteHelper(this)
+        usuariosDBHelper = MySQLiteHelper(this)
 
         var btnIngresar = findViewById<Button>(R.id.btnIngresar)
         btnIngresar.setOnClickListener {
@@ -55,7 +55,7 @@ class Login : AppCompatActivity() {
         Log.d("LoginUser", "Nombre: $nombre, Contraseña: $contrasena")
 
         if (nombre.isNotEmpty() && contrasena.isNotEmpty()) {
-            val resultado = usuariosDBHelper.obtenerDatos(nombre, contrasena)
+            val resultado = usuariosDBHelper.verificarUsuario(nombre, contrasena)
 
             Log.d("LoginUser", "User login resultado: $resultado")
 

@@ -20,7 +20,7 @@
         app:srcCompat="@drawable/logout" />
 
     <Button
-        android:id="@+id/btnRegistrarM"
+        android:id="@+id/btnRegM"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
@@ -71,7 +71,7 @@
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegistrarM" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRegM" />
 
     <Button
         android:id="@+id/btnAdmin"

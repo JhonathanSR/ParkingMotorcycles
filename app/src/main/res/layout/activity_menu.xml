@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/logout" />
 
     <Button
-        android:id="@+id/btnRegP"
+        android:id="@+id/btnRegistrarMoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
@@ -47,7 +47,7 @@
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.301"
-        app:layout_constraintStart_toEndOf="@+id/btnRegP"
+        app:layout_constraintStart_toEndOf="@+id/btnRegistrarMoto"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <EditText
@@ -102,20 +102,6 @@
         app:srcCompat="@android:drawable/ic_media_play" />
 
     <TextView
-        android:id="@+id/tvFechaHora"
-        android:layout_width="64dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="68dp"
-        android:text=""
-        android:hint="Ingrese Fecha"
-        android:textColor="@color/white"
-        android:textSize="14dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.659"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
-    <TextView
         android:id="@+id/textView12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -127,6 +113,6 @@
         app:layout_constraintEnd_toStartOf="@+id/edtMarc"
         app:layout_constraintHorizontal_bias="0.631"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegP" />
+        app:layout_constraintTop_toBottomOf="@+id/btnRegistrarMoto" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

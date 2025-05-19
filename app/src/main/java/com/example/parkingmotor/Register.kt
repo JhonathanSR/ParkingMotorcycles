@@ -15,7 +15,7 @@ import com.example.parkingmotor.databinding.ActivityRegisterBinding
 
 class Register : AppCompatActivity() {
     lateinit var binding: ActivityRegisterBinding
-    lateinit var usuariosDBHelper: mySQLiteHelper
+    lateinit var usuariosDBHelper: MySQLiteHelper
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class Register : AppCompatActivity() {
         }
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        usuariosDBHelper = mySQLiteHelper(this)
+        usuariosDBHelper = MySQLiteHelper(this)
 
         var btnRegistro = findViewById<Button>(R.id.btnRegistro)
         btnRegistro.setOnClickListener {
@@ -57,8 +57,8 @@ class Register : AppCompatActivity() {
         Log.d("RegisterUser", "Nombre: $nombre, Contrasena: $contrasena")
 
         if (nombre.isNotEmpty() && contrasena.isNotEmpty()) {
-            val usuariosDBHelper = mySQLiteHelper(this)
-            val resultado = usuariosDBHelper.anadirdato(nombre, contrasena)
+            val usuariosDBHelper = MySQLiteHelper(this)
+            val resultado = usuariosDBHelper.anadirUsuario(nombre, contrasena)
 
             Log.d("RegisterUser", "User registration resultado: $resultado")
 

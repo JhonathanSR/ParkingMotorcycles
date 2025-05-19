@@ -32,63 +32,18 @@
         app:srcCompat="@drawable/fondo3" />
 
     <Button
-        android:id="@+id/btnNomb"
+        android:id="@+id/btnRegistrarCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Nombre"
         android:backgroundTint="#06EA0F"
-        android:textSize="14dp"
-        android:textColor="@color/white"
+        android:text="Registro Cliente"
         android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="14dp"
         app:layout_constraintEnd_toStartOf="@+id/edtNomb"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <Button
-        android:id="@+id/btnDoc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Cedula"
-        android:backgroundTint="#06EA0F"
-        android:textSize="14dp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/edtDoc"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnNomb" />
-
-    <Button
-        android:id="@+id/btnTel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:text="Teléfono"
-        android:backgroundTint="#06EA0F"
-        android:textSize="14dp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/edtTel"
-        app:layout_constraintHorizontal_bias="0.074"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDoc" />
-
-    <Button
-        android:id="@+id/btnPlaca"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="Placa"
-        android:backgroundTint="#06EA0F"
-        android:textSize="14dp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/edtPlaca"
-        app:layout_constraintHorizontal_bias="0.524"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnTel" />
 
     <EditText
         android:id="@+id/edtNomb"
@@ -97,10 +52,10 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="60dp"
         android:ems="10"
+        android:hint="Ingrese su Nombre"
         android:inputType="text"
         android:text=""
-        android:hint="Ingrese su Nombre"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
@@ -112,10 +67,10 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="56dp"
         android:ems="10"
+        android:hint="Ingrese su Documento"
         android:inputType="text"
         android:text=""
-        android:hint="Ingrese su Documento"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtNomb" />
@@ -127,10 +82,10 @@
         android:layout_marginTop="36dp"
         android:layout_marginEnd="56dp"
         android:ems="10"
+        android:hint="Ingrese su telefono"
         android:inputType="text"
         android:text=""
-        android:hint="Ingrese su telefono"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtDoc" />
@@ -142,10 +97,10 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="60dp"
         android:ems="10"
+        android:hint="Ingrese Placa"
         android:inputType="text"
         android:text=""
-        android:hint="Ingrese Placa"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="14dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edtTel" />
@@ -170,5 +125,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/polygon2" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Cedula"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/edtDoc"
+        app:layout_constraintHorizontal_bias="0.303"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnRegistrarCliente" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="Teléfono"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/edtTel"
+        app:layout_constraintHorizontal_bias="0.336"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Placa"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toStartOf="@+id/edtPlaca"
+        app:layout_constraintHorizontal_bias="0.272"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="658dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
