@@ -10,26 +10,26 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.parkingmotor.databinding.ActivityClienteBinding
+import com.example.parkingmotor.databinding.ActivityIngresoClientBinding
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class RegistroCliente : AppCompatActivity() {
-    lateinit var binding: ActivityClienteBinding
+class IngresoClient : AppCompatActivity() {
+    lateinit var binding: ActivityIngresoClientBinding
     lateinit var clienteDBHelper: clienteSQLiteHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityClienteBinding.inflate(layoutInflater)
-        enableEdgeToEdge()
+        binding = ActivityIngresoClientBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         clienteDBHelper = clienteSQLiteHelper(this)
-
         val btnRegistrarCliente = findViewById<Button>(R.id.btnRegistrarCliente)
         btnRegistrarCliente.setOnClickListener {
             registrarCliente()
@@ -94,4 +94,4 @@ class RegistroCliente : AppCompatActivity() {
         val i = Intent(this, MainActivity::class.java)
         startActivity(i)
     }
-}
+    }

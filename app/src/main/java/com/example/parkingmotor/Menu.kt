@@ -84,16 +84,17 @@ class Menu : AppCompatActivity() {
             Log.e("MenuActivity", "Error al registrar moto", e)
         }
     }
-    private fun goNext() {
-        val i = Intent(this, Cliente::class.java)
-        startActivity(i)
-    }
+
     private fun goSalir() {
         val i = Intent(this, MainActivity::class.java)
         startActivity(i)
     }
     private fun goPrinc() {
         val i = Intent(this, MainActivity::class.java)
+        startActivity(i)
+    }
+    private fun goNext() {
+        val i = Intent(this, IngresoClient::class.java)
         startActivity(i)
     }
     override fun onDestroy() {
