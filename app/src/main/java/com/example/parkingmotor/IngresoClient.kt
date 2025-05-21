@@ -43,14 +43,19 @@ class IngresoClient : AppCompatActivity() {
         imgExit.setOnClickListener {
             goSalir()
         }
+        var imgNext3 = findViewById<ImageView>(R.id.imgNext3)
+        imgNext3.setOnClickListener {
+            goPagar()
+        }
     }
     private fun registrarCliente() {
         val nombre = findViewById<EditText>(R.id.edtNomb).text.toString().trim()
         val cedula = findViewById<EditText>(R.id.edtDoc).text.toString().trim()
         val telefono = findViewById<EditText>(R.id.edtTel).text.toString().trim()
         val placa = findViewById<EditText>(R.id.edtPlaca).text.toString().trim().toUpperCase()
+        val marca = binding.edtMar.text.toString().trim()
 
-        if (nombre.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || placa.isEmpty()) {
+        if (nombre.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || placa.isEmpty()|| marca.isEmpty()) {
             Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
@@ -64,8 +69,12 @@ class IngresoClient : AppCompatActivity() {
             Toast.makeText(this, "La placa debe tener entre 5 y 6 caracteres", Toast.LENGTH_SHORT).show()
             return
         }
+        if (marca.length !in 5..6) {
+            Toast.makeText(this, "La marca debe tener entre 5 y 6 caracteres", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        val resultado = clienteDBHelper.registrarCliente(nombre, cedula, telefono, placa)
+        val resultado = clienteDBHelper.registrarCliente(nombre, cedula, telefono, placa, marca)
 
         if (resultado) {
             Toast.makeText(this, "Cliente registrado correctamente", Toast.LENGTH_SHORT).show()
@@ -84,6 +93,7 @@ class IngresoClient : AppCompatActivity() {
         findViewById<EditText>(R.id.edtDoc).setText("")
         findViewById<EditText>(R.id.edtTel).setText("")
         findViewById<EditText>(R.id.edtPlaca).setText("")
+        findViewById<EditText>(R.id.edtMar).setText("")
     }
 
     private fun goAtras(){
@@ -92,6 +102,10 @@ class IngresoClient : AppCompatActivity() {
     }
     private fun goSalir(){
         val i = Intent(this, MainActivity::class.java)
+        startActivity(i)
+    }
+    private fun goPagar(){
+        val i = Intent(this, Pagos::class.java)
         startActivity(i)
     }
     }
