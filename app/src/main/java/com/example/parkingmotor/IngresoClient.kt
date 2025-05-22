@@ -48,6 +48,7 @@ class IngresoClient : AppCompatActivity() {
             goPagar()
         }
     }
+
     private fun registrarCliente() {
         val nombre = findViewById<EditText>(R.id.edtNomb).text.toString().trim()
         val cedula = findViewById<EditText>(R.id.edtDoc).text.toString().trim()
@@ -55,22 +56,25 @@ class IngresoClient : AppCompatActivity() {
         val placa = findViewById<EditText>(R.id.edtPlaca).text.toString().trim().toUpperCase()
         val marca = binding.edtMar.text.toString().trim()
 
-        if (nombre.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || placa.isEmpty()|| marca.isEmpty()) {
+        if (nombre.isEmpty() || cedula.isEmpty() || telefono.isEmpty() || placa.isEmpty() || marca.isEmpty()) {
             Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (cedula.length !in 8..10) {
-            Toast.makeText(this, "La cédula debe tener entre 8 y 10 dígitos", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "La cédula debe tener entre 8 y 10 dígitos", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
         if (placa.length !in 5..6) {
-            Toast.makeText(this, "La placa debe tener entre 5 y 6 caracteres", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "La placa debe tener entre 5 y 6 caracteres", Toast.LENGTH_SHORT)
+                .show()
             return
         }
         if (marca.length !in 5..6) {
-            Toast.makeText(this, "La marca debe tener entre 5 y 6 caracteres", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "La marca debe tener entre 5 y 6 caracteres", Toast.LENGTH_SHORT)
+                .show()
             return
         }
 
@@ -85,9 +89,14 @@ class IngresoClient : AppCompatActivity() {
             val fechaHora = sdf.format(Date())
             Toast.makeText(this, "Registrado el: $fechaHora", Toast.LENGTH_LONG).show()
         } else {
-            Toast.makeText(this, "Error al registrar cliente (¿cédula ya existe?)", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Error al registrar cliente (¿cédula ya existe?)",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
     private fun limpiarCampos() {
         findViewById<EditText>(R.id.edtNomb).setText("")
         findViewById<EditText>(R.id.edtDoc).setText("")
@@ -96,16 +105,28 @@ class IngresoClient : AppCompatActivity() {
         findViewById<EditText>(R.id.edtMar).setText("")
     }
 
-    private fun goAtras(){
+    private fun goAtras() {
         val i = Intent(this, Menu::class.java)
         startActivity(i)
     }
-    private fun goSalir(){
+
+    private fun goSalir() {
         val i = Intent(this, MainActivity::class.java)
         startActivity(i)
     }
-    private fun goPagar(){
+
+    private fun goPagar() {
+        /*val placa = binding.edtPlaca.text.toString().trim().uppercase()
+        if (placa.isEmpty()) {
+            Toast.makeText(this, "Ingrese una placa primero", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val intent = Intent(this, Pagos::class.java).apply {
+            putExtra("PLACA", placa)
+        }
+        startActivity(intent)*/
         val i = Intent(this, Pagos::class.java)
         startActivity(i)
     }
-    }
+}

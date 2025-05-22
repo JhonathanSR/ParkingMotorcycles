@@ -2,6 +2,7 @@ package com.example.parkingmotor
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -55,32 +56,41 @@ class Pagos : AppCompatActivity() {
             mostrarMensaje("Ingrese una placa para consultar")
             return
         }
+        try {
+            val cliente = clienteDBHelper.consultarClientePorPlaca(placaActual) ?: run {
+                mostrarMensaje("No se encontró registro para esta placa")
+                limpiarCampos()
+                return
+            }
+            /*val cliente = clienteDBHelper.consultarClientePorPlaca(placaActual)
+            if (cliente != null) {*/
+                binding.edtMarca.setText(cliente.marca)
 
-        val cliente = clienteDBHelper.consultarClientePorPlaca(placaActual)
-        if (cliente != null) {
-            binding.edtMarca.setText(cliente.marca)
+                val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+                val fechaIngreso = sdf.parse(cliente.fechaRegistro) ?: Date()
+                val fechaSalida = Date()
 
-            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            val fechaIngreso = sdf.parse(cliente.fechaRegistro) ?: Date()
-            val fechaSalida = Date()
+                binding.edtHora.setText(sdf.format(fechaSalida))
 
-            binding.edtHora.setText(sdf.format(fechaSalida))
+                val duracionMs = fechaSalida.time - fechaIngreso.time
+                val horas = duracionMs / (1000 * 60 * 60)
+                val minutos = (duracionMs % (1000 * 60 * 60)) / (1000 * 60)
 
-            val duracionMs = fechaSalida.time - fechaIngreso.time
-            val horas = duracionMs / (1000 * 60 * 60)
-            val minutos = (duracionMs % (1000 * 60 * 60)) / (1000 * 60)
+                binding.edtTiempo.setText("$horas horas $minutos minutos")
 
-            binding.edtTiempo.setText("$horas horas $minutos minutos")
+                val horasRedondeadas = ceil(horas + minutos / 60.0).toInt()
+                val valorPagar = horasRedondeadas * tarifaPorHora
 
-            val horasRedondeadas = ceil(horas + minutos / 60.0).toInt()
-            val valorPagar = horasRedondeadas * tarifaPorHora
+                binding.edtTotal.setText("$$valorPagar")
+                binding.edtEmpl1.setText("Empleado 1")
 
-            binding.edtTotal.setText("$$valorPagar")
-            binding.edtEmpl1.setText("Empleado 1")
-        } else {
-            mostrarMensaje("No se encontró registro para esta placa")
-            limpiarCampos()
-        }
+            }catch (e: Exception) {
+            mostrarMensaje("Error al consultar datos: ${e.message}")
+            Log.e("Pagos", "Error en consulta", e)
+        }/* else {
+                mostrarMensaje("No se encontró registro para esta placa")
+                limpiarCampos()
+            }*/
     }
 
     private fun actualizarDatos() {
@@ -124,13 +134,18 @@ class Pagos : AppCompatActivity() {
             horaSalida = binding.edtHora.text.toString(),
             duracion = binding.edtTiempo.text.toString(),
             empleado = binding.edtEmpl1.text.toString(),
-            valorPagar = binding.edtTotal.text.toString()
+            valorPagar = binding.edtTotal.text.toString().replace("$", "")
         )
-
-        if (clienteDBHelper.guardarReporte(reporte)) {
-            mostrarMensaje("Reporte guardado correctamente")
-        } else {
-            mostrarMensaje("Error al guardar el reporte")
+        try {
+            if (clienteDBHelper.guardarReporte(reporte)) {
+                mostrarMensaje("Reporte guardado correctamente")
+                limpiarCampos()
+            } else {
+                mostrarMensaje("Error al guardar el reporte")
+            }
+        } catch (e: Exception) {
+            mostrarMensaje("Error crítico: ${e.message}")
+            Log.e("Pagos", "Error guardando reporte", e)
         }
     }
 

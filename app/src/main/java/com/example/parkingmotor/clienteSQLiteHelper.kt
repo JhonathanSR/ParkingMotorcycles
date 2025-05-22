@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -38,6 +39,30 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     fun consultarClientePorPlaca(placa: String): Cliente? {
         val db = readableDatabase
+        return try {
+            db.rawQuery("""
+            SELECT * FROM clientes 
+            WHERE placa = ?
+        """.trimIndent(), arrayOf(placa)).use { cursor ->
+                if (cursor.moveToFirst()) {
+                    Cliente(
+                        id = cursor.getLong(cursor.getColumnIndexOrThrow("_id")),
+                        nombre = cursor.getString(cursor.getColumnIndexOrThrow("nombre")),
+                        cedula = cursor.getString(cursor.getColumnIndexOrThrow("cedula")),
+                        telefono = cursor.getString(cursor.getColumnIndexOrThrow("telefono")),
+                        placa = cursor.getString(cursor.getColumnIndexOrThrow("placa")),
+                        fechaRegistro = cursor.getString(cursor.getColumnIndexOrThrow("fecha_registro")),
+                        marca = cursor.getString(cursor.getColumnIndexOrThrow("marca"))
+                    )
+                } else {
+                    null
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("DB", "Error al consultar cliente", e)
+            null
+        }
+        /*val db = readableDatabase
         val cursor = db.query(
             TABLE_CLIENTES,
             arrayOf(COLUMN_NOMBRE, COLUMN_CEDULA, COLUMN_TELEFONO, COLUMN_PLACA, COLUMN_FECHA_REGISTRO, "marca"),
@@ -61,7 +86,7 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }.also {
             cursor.close()
             db.close()
-        }
+        }*/
     }
     fun eliminarCliente(placa: String): Boolean {
         val db = writableDatabase
