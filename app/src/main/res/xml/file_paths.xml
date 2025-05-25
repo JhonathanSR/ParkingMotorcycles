@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Para acceso a la carpeta Documents/ -->
+    <external-path name="documents" path="Documents/" />
+
+    <!-- Opcional: Para acceso al directorio específico de tu app -->
+    <external-files-path name="my_app_docs" path="Documents/" />
+
+    <!-- Opcional: Para acceso a la carpeta de descargas -->
+    <external-path name="downloads" path="Download/" />
+</paths>

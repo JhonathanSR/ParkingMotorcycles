@@ -233,6 +233,29 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         db.close()
         return clientes
     }
+    fun obtenerTodosReportes(): List<Reporte> {
+        val reportes = mutableListOf<Reporte>()
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM reportes ORDER BY fecha_reporte DESC", null)
+
+        with(cursor) {
+            while (moveToNext()) {
+                reportes.add(
+                    Reporte(
+                        placa = getString(getColumnIndexOrThrow("placa")),
+                        marca = getString(getColumnIndexOrThrow("marca")),
+                        horaSalida = getString(getColumnIndexOrThrow("hora_salida")),
+                        duracion = getString(getColumnIndexOrThrow("duracion")),
+                        empleado = getString(getColumnIndexOrThrow("empleado")),
+                        valorPagar = getString(getColumnIndexOrThrow("valor_pagar"))
+                    )
+                )
+            }
+            close()
+        }
+        db.close()
+        return reportes
+    }
 }
 
 
