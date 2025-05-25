@@ -65,7 +65,7 @@ class Login : AppCompatActivity() {
                 findViewById<EditText>(R.id.edtUser).setText("")
                 findViewById<EditText>(R.id.edtPass).setText("")
 
-                val i = Intent(this, Pagos::class.java)
+                val i = Intent(this, Historico::class.java)
                 startActivity(i)
             } else {
                 Toast.makeText(this, "Usuario o contraseña incorrectos",

@@ -40,10 +40,12 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     fun consultarClientePorPlaca(placa: String): Cliente? {
         val db = readableDatabase
         return try {
-            db.rawQuery("""
+            db.rawQuery(
+                """
             SELECT * FROM clientes 
             WHERE placa = ?
-        """.trimIndent(), arrayOf(placa)).use { cursor ->
+        """.trimIndent(), arrayOf(placa)
+            ).use { cursor ->
                 if (cursor.moveToFirst()) {
                     Cliente(
                         id = cursor.getLong(cursor.getColumnIndexOrThrow("_id")),
@@ -62,32 +64,9 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             Log.e("DB", "Error al consultar cliente", e)
             null
         }
-        /*val db = readableDatabase
-        val cursor = db.query(
-            TABLE_CLIENTES,
-            arrayOf(COLUMN_NOMBRE, COLUMN_CEDULA, COLUMN_TELEFONO, COLUMN_PLACA, COLUMN_FECHA_REGISTRO, "marca"),
-            "$COLUMN_PLACA = ?",
-            arrayOf(placa),
-            null, null, null
-        )
 
-        return if (cursor.moveToFirst()) {
-            Cliente(
-                cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_ID)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NOMBRE)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CEDULA)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TELEFONO)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_PLACA)),
-                cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_FECHA_REGISTRO)),
-                cursor.getString(cursor.getColumnIndexOrThrow("marca"))
-            )
-        } else {
-            null
-        }.also {
-            cursor.close()
-            db.close()
-        }*/
     }
+
     fun eliminarCliente(placa: String): Boolean {
         val db = writableDatabase
         return try {
@@ -96,23 +75,30 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             db.close()
         }
     }
+
     fun guardarReporte(reporte: Reporte): Boolean {
         val db = writableDatabase
-        val values = ContentValues().apply {
-            put("placa", reporte.placa)
-            put("marca", reporte.marca)
-            put("hora_salida", reporte.horaSalida)
-            put("duracion", reporte.duracion)
-            put("empleado", reporte.empleado)
-            put("valor_pagar", reporte.valorPagar)
-            put(
-                "fecha_reporte",
-                SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault()).format(Date())
-            )
-        }
         return try {
-            db.insert("reportes", null, values) != -1L
+            db.beginTransaction()
+
+            val values = ContentValues().apply {
+                put("placa", reporte.placa)
+                put("marca", reporte.marca)
+                put("hora_salida", reporte.horaSalida)
+                put("duracion", reporte.duracion)
+                put("empleado", reporte.empleado)
+                put("valor_pagar", reporte.valorPagar)
+                put("fecha_reporte", SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()))
+            }
+
+            val result = db.insert("reportes", null, values)
+            db.setTransactionSuccessful()
+            result != -1L
+        } catch (e: Exception) {
+            Log.e("DBHelper", "Error al guardar reporte", e)
+            false
         } finally {
+            db.endTransaction()
             db.close()
         }
     }
@@ -193,4 +179,12 @@ data class Cliente(
     val placa: String,
     val fechaRegistro: String,
     val marca: String = ""
+)
+data class Reporte(
+    val placa: String,
+    val marca: String,
+    val horaSalida: String,
+    val duracion: String,
+    val empleado: String,
+    val valorPagar: String
 )

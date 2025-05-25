@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ParkingMotor"
         tools:targetApi="31">
         <activity
+            android:name=".Historico"
+            android:exported="false" />
+        <activity
             android:name=".IngresoClient"
             android:exported="false" />
         <activity
