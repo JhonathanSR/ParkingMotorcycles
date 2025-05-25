@@ -217,11 +217,12 @@ class Pagos : AppCompatActivity() {
                     return
                 }
 
-            val horaSalida = binding.edtHora.text.toString().trim().takeIf { it.isNotEmpty() && isValidDate(it) }
-                ?: run {
-                    mostrarMensaje("Hora de salida inválida o vacía")
-                    return
-                }
+            val horaSalida =
+                binding.edtHora.text.toString().trim().takeIf { it.isNotEmpty() && isValidDate(it) }
+                    ?: run {
+                        mostrarMensaje("Hora de salida inválida o vacía")
+                        return
+                    }
 
             val empleado = binding.edtEmpl1.text.toString().trim().takeIf { it.isNotEmpty() }
                 ?: run {
@@ -229,7 +230,8 @@ class Pagos : AppCompatActivity() {
                     return
                 }
 
-            val valorPagar = binding.edtTotal.text.toString().replace("$", "").trim().takeIf { it.isNotEmpty() && it.matches(Regex("\\d+")) }
+            val valorPagar = binding.edtTotal.text.toString().replace("$", "").trim()
+                .takeIf { it.isNotEmpty() && it.matches(Regex("\\d+")) }
                 ?: run {
                     mostrarMensaje("Valor a pagar inválido")
                     return
@@ -246,7 +248,8 @@ class Pagos : AppCompatActivity() {
             )
 
             // Debug: Mostrar datos en logs
-            Log.d("REPORTE_DEBUG", """
+            Log.d(
+                "REPORTE_DEBUG", """
             === DATOS DEL REPORTE ===
             Placa: ${reporte.placa}
             Marca: ${reporte.marca}
@@ -255,10 +258,16 @@ class Pagos : AppCompatActivity() {
             Empleado: ${reporte.empleado}
             Valor: ${reporte.valorPagar}
             =========================
-        """.trimIndent())
+        """.trimIndent()
+            )
 
             // Intentar guardar
-            val resultado = clienteDBHelper.guardarReporte(reporte)
+            var resultado = clienteDBHelper.guardarReporte(reporte)
+
+            if (!resultado) {
+                clienteDBHelper.recrearBaseDeDatos()
+                resultado = clienteDBHelper.guardarReporte(reporte)
+            }
 
             if (resultado) {
                 mostrarMensaje("Reporte guardado exitosamente")
@@ -276,8 +285,6 @@ class Pagos : AppCompatActivity() {
             Log.e("GUARDAR_REPORTE", "Excepción: ${e.stackTraceToString()}")
         }
     }
-
-
 
     private fun limpiarCampos() {
         binding.edtMarca.text.clear()

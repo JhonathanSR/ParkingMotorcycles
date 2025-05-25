@@ -12,7 +12,7 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     companion object {
         private const val DATABASE_NAME = "clientes.db"
-        private const val DATABASE_VERSION = 2
+        private const val DATABASE_VERSION = 3
         const val TABLE_CLIENTES = "clientes"
         const val COLUMN_ID = "_id"
         const val COLUMN_NOMBRE = "nombre"
@@ -82,46 +82,43 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return try {
             db.beginTransaction()
 
-            // Verificar si la tabla existe
+            // Verificar y crear tabla si no existe
             if (!tablaExiste(db, "reportes")) {
-                throw SQLiteException("La tabla 'reportes' no existe")
+                db.execSQL("""
+                CREATE TABLE reportes (
+                    _id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    placa TEXT NOT NULL,
+                    marca TEXT NOT NULL,
+                    hora_salida TEXT NOT NULL,
+                    duracion TEXT NOT NULL,
+                    empleado TEXT NOT NULL,
+                    valor_pagar TEXT NOT NULL,
+                    fecha_reporte TEXT NOT NULL
+                )
+            """.trimIndent())
             }
 
             val values = ContentValues().apply {
                 put("placa", reporte.placa)
                 put("marca", reporte.marca)
                 put("hora_salida", reporte.horaSalida)
-                put("duracion", reporte.duracion)  // ¡Atención a posibles typos!
+                put("duracion", reporte.duracion)
                 put("empleado", reporte.empleado)
                 put("valor_pagar", reporte.valorPagar)
                 put("fecha_reporte", SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()))
             }
 
-            // Debug: Mostrar valores que se insertarán
-            Log.d("DB_DEBUG", "ContentValues: $values")
-
             val result = db.insert("reportes", null, values)
             db.setTransactionSuccessful()
-
-            if (result == -1L) {
-                ultimoError = "Error al insertar, posible problema con los datos"
-                Log.e("DB_ERROR", ultimoError!!)
-            }
-
             result != -1L
-        } catch (e: SQLiteException) {
-            ultimoError = "Error SQLite: ${e.message}"
-            Log.e("DB_ERROR", ultimoError!!, e)
-            false
         } catch (e: Exception) {
-            ultimoError = "Error general: ${e.localizedMessage}"
-            Log.e("DB_ERROR", ultimoError!!, e)
+            Log.e("DBHelper", "Error al guardar reporte", e)
             false
         } finally {
             try {
                 db.endTransaction()
             } catch (e: Exception) {
-                Log.e("DB_ERROR", "Error al finalizar transacción", e)
+                Log.e("DBHelper", "Error al finalizar transacción", e)
             }
             db.close()
         }
@@ -138,7 +135,9 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     fun obtenerUltimoError(): String? = ultimoError
 
     override fun onCreate(db: SQLiteDatabase) {
-        val CREATE_CLIENTES_TABLE = """
+        try {
+
+            val CREATE_CLIENTES_TABLE = """
         CREATE TABLE $TABLE_CLIENTES (
             $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             $COLUMN_NOMBRE TEXT NOT NULL,
@@ -151,8 +150,26 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
     """.trimIndent()
 
         db.execSQL(CREATE_CLIENTES_TABLE)
-        db.execSQL(CREATE_TABLE_REPORTES)
+            db.execSQL("""
+            CREATE TABLE IF NOT EXISTS reportes (
+                _id INTEGER PRIMARY KEY AUTOINCREMENT,
+                placa TEXT NOT NULL,
+                marca TEXT NOT NULL,
+                hora_salida TEXT NOT NULL,
+                duracion TEXT NOT NULL,
+                empleado TEXT NOT NULL,
+                valor_pagar TEXT NOT NULL,
+                fecha_reporte TEXT NOT NULL
+            )
+        """.trimIndent())
+
+            Log.d("Database", "Tablas creadas exitosamente")
+        } catch (e: Exception) {
+            Log.e("Database", "Error al crear tablas", e)
+        }
     }
+
+
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         if (oldVersion < 2) {
@@ -176,6 +193,19 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             db.insert(TABLE_CLIENTES, null, values) != -1L
         } catch (e: Exception) {
             false
+        } finally {
+            db.close()
+        }
+    }
+    fun recrearBaseDeDatos() {
+        val db = writableDatabase
+        try {
+            db.execSQL("DROP TABLE IF EXISTS $TABLE_CLIENTES")
+            db.execSQL("DROP TABLE IF EXISTS reportes")
+            onCreate(db)
+            Log.d("Database", "Base de datos recreada exitosamente")
+        } catch (e: Exception) {
+            Log.e("Database", "Error al recrear base de datos", e)
         } finally {
             db.close()
         }
