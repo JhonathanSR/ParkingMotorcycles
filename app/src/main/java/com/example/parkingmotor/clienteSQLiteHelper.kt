@@ -3,6 +3,7 @@ package com.example.parkingmotor
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteException
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import java.text.SimpleDateFormat
@@ -75,33 +76,66 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
             db.close()
         }
     }
-
+    private var ultimoError: String? = null
     fun guardarReporte(reporte: Reporte): Boolean {
         val db = writableDatabase
         return try {
             db.beginTransaction()
 
+            // Verificar si la tabla existe
+            if (!tablaExiste(db, "reportes")) {
+                throw SQLiteException("La tabla 'reportes' no existe")
+            }
+
             val values = ContentValues().apply {
                 put("placa", reporte.placa)
                 put("marca", reporte.marca)
                 put("hora_salida", reporte.horaSalida)
-                put("duracion", reporte.duracion)
+                put("duracion", reporte.duracion)  // ¡Atención a posibles typos!
                 put("empleado", reporte.empleado)
                 put("valor_pagar", reporte.valorPagar)
                 put("fecha_reporte", SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date()))
             }
 
+            // Debug: Mostrar valores que se insertarán
+            Log.d("DB_DEBUG", "ContentValues: $values")
+
             val result = db.insert("reportes", null, values)
             db.setTransactionSuccessful()
+
+            if (result == -1L) {
+                ultimoError = "Error al insertar, posible problema con los datos"
+                Log.e("DB_ERROR", ultimoError!!)
+            }
+
             result != -1L
+        } catch (e: SQLiteException) {
+            ultimoError = "Error SQLite: ${e.message}"
+            Log.e("DB_ERROR", ultimoError!!, e)
+            false
         } catch (e: Exception) {
-            Log.e("DBHelper", "Error al guardar reporte", e)
+            ultimoError = "Error general: ${e.localizedMessage}"
+            Log.e("DB_ERROR", ultimoError!!, e)
             false
         } finally {
-            db.endTransaction()
+            try {
+                db.endTransaction()
+            } catch (e: Exception) {
+                Log.e("DB_ERROR", "Error al finalizar transacción", e)
+            }
             db.close()
         }
     }
+
+    // Método para verificar existencia de tablas
+    private fun tablaExiste(db: SQLiteDatabase, tableName: String): Boolean {
+        db.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='$tableName'", null).use {
+            return it.moveToFirst()
+        }
+    }
+
+    // Método para obtener el último error
+    fun obtenerUltimoError(): String? = ultimoError
 
     override fun onCreate(db: SQLiteDatabase) {
         val CREATE_CLIENTES_TABLE = """
@@ -170,6 +204,7 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         return clientes
     }
 }
+
 
 data class Cliente(
     val id: Long,

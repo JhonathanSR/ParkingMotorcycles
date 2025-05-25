@@ -204,46 +204,38 @@ class Pagos : AppCompatActivity() {
 
     private fun guardarReporte() {
         try {
+            // Verificación inicial
             if (placaActual.isEmpty()) {
                 mostrarMensaje("Primero consulte una placa")
                 return
             }
 
-            // Validación exhaustiva de campos
-            val marca = binding.edtMarca.text.toString().trim()
-            val horaSalida = binding.edtHora.text.toString().trim()
-            val empleado = binding.edtEmpl1.text.toString().trim()
-            val valorPagar = binding.edtTotal.text.toString().replace("$", "").trim()
-
-            when {
-                marca.isEmpty() -> {
+            // Obtener y validar campos
+            val marca = binding.edtMarca.text.toString().trim().takeIf { it.isNotEmpty() }
+                ?: run {
                     mostrarMensaje("La marca no puede estar vacía")
                     return
                 }
-                horaSalida.isEmpty() -> {
-                    mostrarMensaje("Ingrese la hora de salida")
-                    binding.edtHora.requestFocus()
-                    return
-                }
-                empleado.isEmpty() -> {
-                    mostrarMensaje("Ingrese el nombre del empleado")
-                    binding.edtEmpl1.requestFocus()
-                    return
-                }
-                valorPagar.isEmpty() -> {
-                    mostrarMensaje("Calcule el valor a pagar primero")
-                    return
-                }
-                !isValidDate(horaSalida) -> {
-                    mostrarMensaje("Formato de hora inválido (Use yyyy-MM-dd HH:mm:ss)")
-                    return
-                }
-                !valorPagar.matches(Regex("\\d+")) -> {
-                    mostrarMensaje("El valor a pagar debe ser un número")
-                    return
-                }
-            }
 
+            val horaSalida = binding.edtHora.text.toString().trim().takeIf { it.isNotEmpty() && isValidDate(it) }
+                ?: run {
+                    mostrarMensaje("Hora de salida inválida o vacía")
+                    return
+                }
+
+            val empleado = binding.edtEmpl1.text.toString().trim().takeIf { it.isNotEmpty() }
+                ?: run {
+                    mostrarMensaje("Nombre de empleado vacío")
+                    return
+                }
+
+            val valorPagar = binding.edtTotal.text.toString().replace("$", "").trim().takeIf { it.isNotEmpty() && it.matches(Regex("\\d+")) }
+                ?: run {
+                    mostrarMensaje("Valor a pagar inválido")
+                    return
+                }
+
+            // Crear objeto Reporte
             val reporte = Reporte(
                 placa = placaActual,
                 marca = marca,
@@ -253,20 +245,38 @@ class Pagos : AppCompatActivity() {
                 valorPagar = valorPagar
             )
 
-            Log.d("GuardarReporte", "Datos del reporte: $reporte")
+            // Debug: Mostrar datos en logs
+            Log.d("REPORTE_DEBUG", """
+            === DATOS DEL REPORTE ===
+            Placa: ${reporte.placa}
+            Marca: ${reporte.marca}
+            Hora Salida: ${reporte.horaSalida}
+            Duración: ${reporte.duracion}
+            Empleado: ${reporte.empleado}
+            Valor: ${reporte.valorPagar}
+            =========================
+        """.trimIndent())
 
-            if (clienteDBHelper.guardarReporte(reporte)) {
-                mostrarMensaje("Reporte guardado correctamente")
+            // Intentar guardar
+            val resultado = clienteDBHelper.guardarReporte(reporte)
+
+            if (resultado) {
+                mostrarMensaje("Reporte guardado exitosamente")
                 limpiarCampos()
                 placaActual = ""
             } else {
-                mostrarMensaje("Error al guardar. Verifique los logs para más detalles")
+                // Obtener error específico de la base de datos
+                val errorInfo = clienteDBHelper.obtenerUltimoError()
+                mostrarMensaje("Error al guardar: ${errorInfo ?: "Verifique los datos"}")
+                Log.e("GUARDAR_REPORTE", "Error detallado: $errorInfo")
             }
+
         } catch (e: Exception) {
-            mostrarMensaje("Error crítico: ${e.message}")
-            Log.e("Pagos", "Error guardando reporte", e)
+            mostrarMensaje("Error inesperado: ${e.localizedMessage}")
+            Log.e("GUARDAR_REPORTE", "Excepción: ${e.stackTraceToString()}")
         }
     }
+
 
 
     private fun limpiarCampos() {
