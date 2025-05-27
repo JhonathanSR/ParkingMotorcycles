@@ -45,7 +45,7 @@ class Pagos : AppCompatActivity() {
     private fun setupButtonListeners() {
         binding.btnBuscar.setOnClickListener { consultarDatos() }
         binding.btnActual.setOnClickListener { actualizarDatos() }
-        binding.btnElim.setOnClickListener { eliminarRegistro() }
+        //binding.btnElim.setOnClickListener { eliminarRegistro() }
         binding.btnSave.setOnClickListener { guardarReporte() }
         binding.imgExt.setOnClickListener { salir() }
 
@@ -187,7 +187,7 @@ class Pagos : AppCompatActivity() {
         mostrarMensaje("Datos actualizados correctamente")
     }
 
-    private fun eliminarRegistro() {
+    /*private fun eliminarRegistro() {
         if (placaActual.isEmpty()) {
             mostrarMensaje("Primero consulte una placa")
             return
@@ -200,7 +200,7 @@ class Pagos : AppCompatActivity() {
         } else {
             mostrarMensaje("Error al eliminar el registro")
         }
-    }
+    }*/
 
     private fun guardarReporte() {
         try {

@@ -64,7 +64,7 @@ class Register : AppCompatActivity() {
 
             if (resultado) {
                 Toast.makeText(
-                    this, "Usuario Registrado Correctamente",
+                    this, "Usuario Registrado",
                     Toast.LENGTH_SHORT
                 ).show()
                 findViewById<EditText>(R.id.edtCorreo).setText("")

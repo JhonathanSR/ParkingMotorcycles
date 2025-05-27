@@ -60,7 +60,7 @@ class Login : AppCompatActivity() {
             Log.d("LoginUser", "User login resultado: $resultado")
 
             if (resultado) {
-                Toast.makeText(this, "Inicio de Sesión Exitoso",
+                Toast.makeText(this, "Iniciando Sesión",
                     Toast.LENGTH_SHORT).show()
                 findViewById<EditText>(R.id.edtUser).setText("")
                 findViewById<EditText>(R.id.edtPass).setText("")

@@ -68,10 +68,18 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
 
     }
 
-    fun eliminarCliente(placa: String): Boolean {
+    /*fun eliminarCliente(placa: String): Boolean {
         val db = writableDatabase
         return try {
             db.delete(TABLE_CLIENTES, "$COLUMN_PLACA = ?", arrayOf(placa)) > 0
+        } finally {
+            db.close()
+        }
+    }*/
+    fun eliminarReporte(placa: String): Boolean {
+        val db = writableDatabase
+        return try {
+            db.delete("reportes", "placa = ?", arrayOf(placa)) > 0
         } finally {
             db.close()
         }
@@ -255,6 +263,23 @@ class clienteSQLiteHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         }
         db.close()
         return reportes
+    }
+    fun obtenerReportePorPlaca(placa: String): Reporte? {
+        val db = readableDatabase
+        return db.rawQuery("SELECT * FROM reportes WHERE placa = ?", arrayOf(placa)).use { cursor ->
+            if (cursor.moveToFirst()) {
+                Reporte(
+                    placa = cursor.getString(cursor.getColumnIndexOrThrow("placa")),
+                    marca = cursor.getString(cursor.getColumnIndexOrThrow("marca")),
+                    horaSalida = cursor.getString(cursor.getColumnIndexOrThrow("hora_salida")),
+                    duracion = cursor.getString(cursor.getColumnIndexOrThrow("duracion")),
+                    empleado = cursor.getString(cursor.getColumnIndexOrThrow("empleado")),
+                    valorPagar = cursor.getString(cursor.getColumnIndexOrThrow("valor_pagar"))
+                )
+            } else {
+                null
+            }
+        }
     }
 }
 

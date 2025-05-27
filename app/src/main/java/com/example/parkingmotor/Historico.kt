@@ -3,6 +3,7 @@ package com.example.parkingmotor
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -19,10 +20,13 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.ceil
 
 class Historico : AppCompatActivity() {
     private lateinit var binding: ActivityHistoricoBinding
     private lateinit var dbHelper: clienteSQLiteHelper
+    private var placaActual: String =""
+    private var ultimoReporteEliminado: Reporte? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,9 @@ class Historico : AppCompatActivity() {
         }
 
         dbHelper = clienteSQLiteHelper(this)
+
+        placaActual = intent.getStringExtra("PLACA") ?: ""
+
         binding.btnImprimir.setOnClickListener {
             generarPDF()
         }
@@ -44,11 +51,73 @@ class Historico : AppCompatActivity() {
         binding.imgSal.setOnClickListener {
             finish()
         }
+        binding.btnSearch.setOnClickListener {
+            consultarDatos()
+        }
+        setupButtonListeners()
+    }
+    private fun setupButtonListeners(){
+        binding.btnDelete.setOnClickListener { eliminarRegistro() }
+    }
+    private fun eliminarRegistro() {
+        if (placaActual.isEmpty()) {
+           Toast.makeText(this, "Primero consulte una placa", Toast.LENGTH_SHORT).show()
+            return
+        }
+        val reporte = dbHelper.obtenerReportePorPlaca(placaActual)
+
+        if (dbHelper.eliminarReporte(placaActual)) {
+            ultimoReporteEliminado = reporte // Guardar el reporte eliminado
+            Toast.makeText(this, "Registro eliminado correctamente", Toast.LENGTH_SHORT).show()
+            placaActual = ""
+        } else {
+            Toast.makeText(this, "Error al eliminar el registro", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun consultarDatos() {
+        placaActual = binding.edtPla.text.toString().trim().uppercase()
+        Log.d("Pagos", "Consultando datos para placa: $placaActual")
+
+        if (placaActual.isEmpty()) {
+            mostrarMensaje("Ingrese una placa para consultar") // Ahora funcionará
+            return
+        }
+        try {
+            val reporte = dbHelper.obtenerReportePorPlaca(placaActual) ?: run {
+                mostrarMensaje("No se encontró registro para esta placa")
+                limpiarCampos()
+                return
+            }
+            Log.d("Pagos", "Reporte encontrado: ${reporte.marca}, Fecha registro: ${reporte.horaSalida}")
+
+            binding.edtMarcas.setText(reporte.marca)
+            binding.edtDat.setText(reporte.horaSalida)
+            binding.edtTime.setText(reporte.duracion)
+            binding.edtValor.setText(reporte.valorPagar)
+            binding.edtEmplea.setText(reporte.empleado)
+
+        } catch (e: Exception) {
+            mostrarMensaje("Error al consultar datos: ${e.message}")
+            Log.e("Pagos", "Error en consulta: ${e.message}", e)
+        }
     }
 
+    // Función auxiliar para mostrar Toast
+    private fun mostrarMensaje(mensaje: String) {
+        Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show()
+    }
     private fun generarPDF() {
         try {
-            val reportes = dbHelper.obtenerTodosReportes()
+            val reportes = dbHelper.obtenerTodosReportes().toMutableList()
+            //val reportes = dbHelper.obtenerTodosReportes()
+            if (reportes.isEmpty()) {
+                Toast.makeText(this, "No hay datos para generar PDF", Toast.LENGTH_SHORT).show()
+                return
+            }
+            ultimoReporteEliminado?.let {
+                reportes.add(it)
+                Toast.makeText(this, "Incluyendo registro eliminado en el PDF", Toast.LENGTH_SHORT).show()
+            }
             if (reportes.isEmpty()) {
                 Toast.makeText(this, "No hay datos para generar PDF", Toast.LENGTH_SHORT).show()
                 return
@@ -111,11 +180,21 @@ class Historico : AppCompatActivity() {
 
             Toast.makeText(this, "PDF guardado en: ${file.path}", Toast.LENGTH_LONG).show()
             abrirPDF(file)
+            ultimoReporteEliminado = null
 
         } catch (e: Exception) {
             Toast.makeText(this, "Error al generar PDF: ${e.message}", Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
+    }
+    private fun limpiarCampos() {
+        binding.edtPla.text.clear()
+        binding.edtMarcas.text.clear()
+        binding.edtDat.text.clear()
+        binding.edtTime.text.clear()
+        binding.edtEmplea.text.clear()
+        binding.edtValor.text.clear()
+
     }
 
     private fun createCell(text: String, font: Font): PdfPCell {
@@ -142,4 +221,5 @@ class Historico : AppCompatActivity() {
         val i = Intent(this, MainActivity::class.java)
         startActivity(i)
     }
+
 }
